@@ -1,0 +1,3 @@
+[submodule "MERN-stack-project"]
+	path = MERN-stack-project
+	url = https://github.com/alexYooDev/MERN-stack-project.git
