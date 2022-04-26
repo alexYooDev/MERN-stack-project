@@ -1,24 +1,14 @@
-const http = require('http');
+const express = require('express');
+const bp = require('body-parser');
 
-const server = http.createServer((req, res) => {
-  console.log('INCOMING REQUEST');
-  console.log(req.method, req.url);
+const placesRoutes = require('./routes/places-routes');
 
-  if (req.method === 'POST') {
-    let body = '';
-    req.on('end', () => {
-      const userName = body.split('=')[1];
-      res.end('<h1>' + userName + '</h1>');
-    });
-    req.on('data', (chunk) => {
-      body += chunk;
-    });
-  } else {
-    res.setHeader('Content-Type', 'text/html');
-    res.end(
-      '<form method="POST"><input type="text" name="username"/><button>확인</button></form>'
-    );
-  }
-});
+const usersRoutes = require('./routes/users-routes');
 
-server.listen(5001);
+const app = express();
+
+app.use('/api/places', placesRoutes);
+
+app.use('/api/users', usersRoutes);
+
+app.listen(5001);
