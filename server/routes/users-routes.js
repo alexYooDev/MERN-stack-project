@@ -1,26 +1,24 @@
 const express = require('express');
+const { check } = require('express-validator');
 
 const router = express.Router();
 
-const DUMMY_USERS = [
-  {
-    id: 'u1',
-    name: 'alex',
-    age: '27',
-    occupation: 'developer',
-  },
-];
+const usersController = require('../controllers/users-controllers');
 
-router.get('/:uid', (req, res, next) => {
-  const userId = req.params.uid;
+router.get('/', usersController.getAllUsers);
 
-  const user = DUMMY_USERS.find((u) => {
-    return u.id === userId;
-  });
+router.post(
+  '/signup',
+  [
+    check('name').not().isEmpty(),
+    check('email').normalizeEmail().isEmail(),
+    check('password').isLength({ min: 8 }),
+  ],
+  usersController.signUp
+);
 
-  return res.json({
-    user,
-  });
-});
+router.post('/login', usersController.logIn);
+
+router.get('/:uid', usersController.getUserById);
 
 module.exports = router;
